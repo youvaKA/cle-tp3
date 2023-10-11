@@ -1,0 +1,3 @@
+[submodule "sc_minilib"]
+	path = sc_minilib
+	url = https://gitlab-etu.fil.univ-lille.fr/cle-2023/sc_minilib
