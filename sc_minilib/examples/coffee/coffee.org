@@ -1,0 +1,21 @@
+* Coffee machine
+
+#+BEGIN_SRC plantuml :file coffee_machine.png
+@startuml
+  state CoffeeMachine {
+      [*] --> Idle
+      state MakingCoffee : entry/start_timeout(10)
+      Idle --> MakingCoffee : evt_coffee [money >= 2] / start_coffee()
+      MakingCoffee --> CoffeeReady : evt_timeout / release_coffee()
+      CoffeeReady --> Idle : evt_taken 
+      ||
+      [*] --> Accept 
+      Accept -> Accept : evt_money / money++
+      Accept --> NoAccept : evt_coffee / money-=2
+      NoAccept --> Accept : evt_taken
+  }
+@enduml
+#+END_SRC
+
+#+RESULTS:
+[[file:coffee_machine.png]]

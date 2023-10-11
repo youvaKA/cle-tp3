@@ -1,0 +1,73 @@
+#include <QApplication>
+#include <QWidget>
+#include <QPushButton>
+#include <QLabel>
+#include <QGridLayout>
+
+#include "fan.hpp"
+
+class MyWindow : public QWidget
+{
+
+    Q_OBJECT
+    
+public:
+    MyWindow(QWidget *parent = nullptr);
+    virtual ~MyWindow() {}                                   
+                                       
+private slots:
+    void OnPlus();
+    void OnMinus();
+
+private:
+    QLabel *lbl;
+    QPushButton *plusBtn;
+    QPushButton *minusBtn;
+    QPushButton *quitBtn;
+    QGridLayout *grid;
+};
+
+MyWindow::MyWindow(QWidget *parent) : QWidget(parent)
+{
+    quitBtn = new QPushButton("Quit", this);
+    //quitBtn->setGeometry(50, 40, 75, 30);
+
+    plusBtn = new QPushButton("+", this);
+    minusBtn = new QPushButton("-", this);
+    grid = new QGridLayout(this);
+    lbl = new QLabel("0", this);
+
+    connect(quitBtn, &QPushButton::clicked, qApp, &QApplication::quit);
+    connect(plusBtn, &QPushButton::clicked, this, &MyWindow::OnPlus);
+    connect(minusBtn, &QPushButton::clicked, this, &MyWindow::OnMinus);
+}
+
+
+void MyWindow::OnPlus()
+{
+  int val = lbl->text().toInt();
+  val++;
+  lbl->setText(QString::number(val));
+}
+
+
+void MyWindow::OnMinus()
+{
+  int val = lbl->text().toInt();
+  val--;
+  lbl->setText(QString::number(val));
+}
+
+
+
+int main(int argc, char *argv[])
+{
+    QApplication app(argc, argv);
+    
+    MyWindow window;
+    
+    window.resize(500, 400);
+    window.setWindowTitle("Fan Demo");
+    window.show();
+    return app.exec();
+}

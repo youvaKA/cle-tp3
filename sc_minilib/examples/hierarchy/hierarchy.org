@@ -1,0 +1,31 @@
+* Hierarchy test
+
+  #+BEGIN_SRC plantuml :file hierarchy.png
+  @startuml
+  state Root {
+     [*] -r-> Off
+     state Pause {
+         [*] --> Cooldown 
+         Cooldown : entry/start_fan()
+         Cooldown : exit/stop_fan()
+         Cooldown --> Cooldown : TICK / temp--
+         Cooldown --> Ready : TICK [temp <= 20] 
+     }
+     state On {
+         Working -> Working : TICK [temp <= 30] / temp++
+         Working : entry/start_engine(SLOW)
+         Working -d-> Boost : BOOST
+         Boost : entry/start_engine(FAST)
+         Boost -u-> Working : BOOST 
+         Boost --> Boost : TICK [temp <=30 ] / temp+=2
+         Working -[hidden]> [H] 
+     }
+     Off -r-> On : START 
+     On -d-> Pause : TICK [temp > 30] / stop_engine()
+     Pause -l-> On : RESTART [temp <= 20]
+  }
+  @enduml
+  #+END_SRC
+
+  #+RESULTS:
+  [[file:hierarchy.png]]
